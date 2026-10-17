@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Harbor · $HARBOR · a coin with a harbor master</title>
+<meta name="description" content="Agent Harbor: every $HARBOR trade is a boat coming in, and the harbor agent works the docks collecting the dock fees.">
+<meta name="theme-color" content="#7fd3ff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%2324b6e6'/%3E%3Cpath d='M6 19h20l-3 6H9z' fill='%23c8642b' stroke='%235a2a10' stroke-width='1.5'/%3E%3Crect x='11' y='11' width='10' height='8' rx='1.5' fill='%23e0823d' stroke='%235a2a10' stroke-width='1.5'/%3E%3Crect x='14.5' y='6' width='3' height='5' fill='%235a2a10'/%3E%3C/svg%3E">
+<style>
+:root{
+  --sky1:#6ccdfb;--sky2:#c8f0ff;--sea1:#29bde6;--sea2:#0b8ac4;--sand:#f6d58b;--sand2:#e9b65c;
+  --wood:#c8743a;--wood2:#a3582a;--wood3:#6b3415;--woodl:#e9a868;--rope:#d9b77a;
+  --leaf:#3fbf4f;--leaf2:#22963a;--ink:#3a1d0b;--cream:#fff7e6;--white:#fff;
+  --navy:#16314d;--teal:#0e9fb8;--coin:#ffcf33;--coin2:#e8a20c;
+  --display:"Lilita One","Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif;
+  --body:"Nunito",ui-rounded,"Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{margin:0;font-family:var(--body);color:var(--ink);background:var(--cream);font-size:17px;line-height:1.55;overflow-x:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--navy);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+
+/* ===== wood UI kit ===== */
+.plank{position:relative;background:linear-gradient(180deg,var(--woodl) 0%,var(--wood) 18%,var(--wood) 82%,var(--wood2) 100%);border:3px solid var(--wood3);border-radius:14px;box-shadow:0 5px 0 var(--wood3),0 10px 20px rgba(60,25,5,.25),inset 0 2px 0 rgba(255,255,255,.35);color:var(--cream);text-shadow:0 2px 0 var(--wood3)}
+.plank:before{content:"";position:absolute;inset:0;border-radius:11px;background:repeating-linear-gradient(0deg,transparent 0 13px,rgba(90,40,10,.18) 13px 15px),repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 60px,rgba(0,0,0,.04) 60px 120px);pointer-events:none}
+.nail{position:absolute;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f3e1c4,#7a6a55 70%);box-shadow:0 1px 0 rgba(0,0,0,.35)}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-size:20px;letter-spacing:.5px;padding:12px 24px;text-decoration:none;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--wood3),0 4px 10px rgba(60,25,5,.25),inset 0 2px 0 rgba(255,255,255,.35)}
+.btn.teal{background:linear-gradient(180deg,#5fe0f2 0%,#1fb3cf 20%,#1fb3cf 80%,#0f8aa3 100%);border-color:#0a4f5e;box-shadow:0 5px 0 #0a4f5e,0 10px 20px rgba(5,60,80,.25),inset 0 2px 0 rgba(255,255,255,.45);text-shadow:0 2px 0 #0a4f5e}
+.btn.gold{background:linear-gradient(180deg,#ffe58a 0%,#ffc933 20%,#ffc933 80%,#e3a00c 100%);border-color:#7a4b00;box-shadow:0 5px 0 #7a4b00,0 10px 20px rgba(80,50,0,.25),inset 0 2px 0 rgba(255,255,255,.55);color:#5a3300;text-shadow:0 1px 0 rgba(255,255,255,.5)}
+.btn.sm{font-size:16px;padding:8px 16px}
+.rope-hang{position:absolute;top:-40px;width:6px;height:44px;background:repeating-linear-gradient(160deg,var(--rope) 0 5px,#b08a4a 5px 8px);border-radius:3px}
+
+/* ===== nav ===== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:40;padding:12px 0;transition:background .25s,box-shadow .25s}
+.nav.solid{background:rgba(255,247,230,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 2px 0 rgba(107,52,21,.15)}
+.nav-in{display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-size:24px;color:var(--white);text-shadow:0 2px 0 var(--wood3),0 0 2px var(--wood3)}
+.nav.solid .brand{color:var(--wood)}
+.brand svg{flex:none;filter:drop-shadow(0 2px 0 rgba(0,0,0,.2))}
+.nlinks{display:flex;gap:6px;margin-left:12px}
+.nlinks a{font-weight:900;text-decoration:none;padding:6px 12px;border-radius:999px;color:var(--white);text-shadow:0 1px 2px rgba(0,0,0,.35);font-size:15.5px}
+.nav.solid .nlinks a{color:var(--ink);text-shadow:none}
+.nlinks a:hover{background:rgba(255,255,255,.25)}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:10px}
+.icon-btn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0;border-radius:12px}
+
+/* ===== hero ===== */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(180deg,var(--sky1),var(--sky2) 38%,var(--sea1) 38.2%,var(--sea2))}
+#scene{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:pointer}
+.hero-ui{position:relative;z-index:2;pointer-events:none;flex:1;display:flex;flex-direction:column;padding-top:92px}
+.hero-ui .wrap{width:100%}
+.title-sign{pointer-events:auto;display:inline-block;position:relative;padding:18px 34px 14px;transform:rotate(-2deg);margin-top:6px}
+.title-sign h1{position:relative;margin:0;font-family:var(--display);font-weight:400;font-size:clamp(46px,8.2vw,104px);line-height:.9;letter-spacing:1px;color:#fff3dc;text-shadow:0 4px 0 var(--wood3),0 0 2px var(--wood3),4px 4px 0 var(--wood3),-2px -2px 0 var(--wood3),2px -2px 0 var(--wood3),-2px 2px 0 var(--wood3)}
+.title-sign h1 span{display:block;color:#ffd75e}
+.title-sign .rope-hang.l{left:40px}.title-sign .rope-hang.r{right:40px}
+.hero-copy{pointer-events:auto;max-width:540px;margin-top:26px;background:rgba(255,247,230,.92);border:3px solid var(--wood3);border-radius:18px;padding:18px 22px;box-shadow:0 6px 0 rgba(107,52,21,.35)}
+.hero-copy .kick{font-family:var(--display);color:var(--teal);font-size:18px;letter-spacing:.5px}
+.hero-copy p{margin:6px 0 0;font-weight:700;font-size:18px}
+.hero-btns{pointer-events:auto;display:flex;flex-wrap:wrap;gap:14px;margin-top:22px}
+.hud{pointer-events:auto;position:absolute;right:22px;top:96px;display:flex;flex-direction:column;gap:12px;z-index:3}
+.hud .stat{padding:10px 16px 10px 14px;min-width:200px;transform:rotate(1.5deg)}
+.hud .stat:nth-child(2){transform:rotate(-1.5deg)}
+.hud .stat small{position:relative;display:block;font-family:var(--body);font-weight:900;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#ffe9c7;text-shadow:none;opacity:.9}
+.hud .stat b{position:relative;display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:400;font-size:28px;line-height:1.1}
+.coin-ic{width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff4b8,var(--coin) 45%,var(--coin2));border:2px solid #7a4b00;display:inline-flex;align-items:center;justify-content:center;font:900 12px var(--body);color:#7a4b00;text-shadow:none;flex:none}
+.sim-tag{position:absolute;left:22px;bottom:18px;z-index:3;pointer-events:auto;font-weight:800;font-size:13px;background:rgba(255,247,230,.9);border:2px solid var(--wood3);border-radius:999px;padding:5px 12px}
+.tip{position:absolute;z-index:4;pointer-events:none;background:var(--cream);border:3px solid var(--wood3);border-radius:14px;padding:8px 12px;font-weight:800;font-size:14px;box-shadow:0 4px 0 rgba(107,52,21,.35);transform:translate(-50%,calc(-100% - 14px));white-space:nowrap;opacity:0;transition:opacity .15s}
+.tip:after{content:"";position:absolute;left:50%;bottom:-11px;transform:translateX(-50%);border:8px solid transparent;border-top-color:var(--wood3)}
+.tip.on{opacity:1}
+.scroll-cue{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:3;font-family:var(--display);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25);text-decoration:none;font-size:16px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translate(-50%,6px)}}
+
+/* ===== sections ===== */
+.sec{padding:96px 0 40px;position:relative}
+.sec-head{text-align:center;max-width:720px;margin:0 auto 46px}
+.sec-head .ribbon{display:inline-block;font-family:var(--display);font-size:16px;letter-spacing:1px;color:#fff;background:var(--teal);padding:6px 18px;border-radius:999px;box-shadow:0 4px 0 #0a5a6a}
+.sec-head h2{font-family:var(--display);font-weight:400;font-size:clamp(36px,5vw,60px);line-height:1;margin:16px 0 12px;color:var(--wood);text-shadow:0 3px 0 rgba(107,52,21,.18)}
+.sec-head p{margin:0;font-weight:700;color:#7a5236;font-size:18px}
+.sand{background:linear-gradient(180deg,#fdebc0,var(--sand));}
+.sand:before{content:"";position:absolute;left:0;right:0;top:-30px;height:32px;background:radial-gradient(60px 32px at 30px 32px,#fdebc0 98%,transparent 100%) repeat-x;background-size:60px 32px}
+.water{background:linear-gradient(180deg,#d9f6ff,#b5ecfb)}
+
+/* how it works */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.card{position:relative;background:var(--cream);border:3px solid var(--wood3);border-radius:20px;padding:22px 20px 20px;box-shadow:0 6px 0 rgba(107,52,21,.35),0 16px 30px rgba(107,52,21,.12)}
+.card .ico{width:84px;height:84px;margin:-58px auto 10px;border-radius:50%;background:linear-gradient(180deg,#8fe6ff,#24b6e6);border:3px solid var(--wood3);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 rgba(107,52,21,.35)}
+.card h3{font-family:var(--display);font-weight:400;font-size:24px;margin:0 0 6px;color:var(--wood);text-align:center;line-height:1.1}
+.card p{margin:0;font-weight:600;color:#6a4a30;font-size:15.5px;text-align:center}
+.card .n{position:absolute;top:12px;left:14px;font-family:var(--display);color:var(--wood2);opacity:.5}
+.steps .card{margin-top:40px}
+
+/* agent */
+.agent-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:36px;align-items:center}
+.agent-art{position:relative;background:radial-gradient(circle at 50% 60%,#ffffff 0,#d9f6ff 55%,transparent 72%);border-radius:30px;aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+.agent-art canvas{width:86%;height:86%}
+.bubble{position:absolute;top:6%;right:4%;max-width:230px;background:#fff;border:3px solid var(--wood3);border-radius:18px;padding:10px 14px;font-weight:800;font-size:15px;box-shadow:0 4px 0 rgba(107,52,21,.35)}
+.bubble:after{content:"";position:absolute;left:30px;bottom:-14px;border:10px solid transparent;border-top-color:var(--wood3)}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rules .card{padding:18px 18px 14px}
+.rules h4{margin:0 0 10px;font-family:var(--display);font-weight:400;font-size:22px;display:flex;align-items:center;gap:8px}
+.rules ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rules li{display:flex;gap:10px;align-items:flex-start;font-weight:700;font-size:15.5px}
+.rules li i{flex:none;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-style:normal;font-weight:900;font-size:14px;color:#fff;border:2px solid rgba(0,0,0,.25);margin-top:1px}
+.can i{background:#2fbf5a}.cant i{background:#e8544a}
+.can h4{color:#1f8f43}.cant h4{color:#c23a31}
+.agent-name{font-family:var(--display);font-size:clamp(30px,4vw,44px);color:var(--wood);margin:0;line-height:1}
+.agent-sub{font-weight:800;color:var(--teal);margin:4px 0 16px}
+.agent-copy{font-weight:600;color:#6a4a30;margin:0 0 20px}
+
+/* log + ledger */
+.log-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:22px}
+.board{position:relative;padding:22px}
+.board h3{position:relative;margin:0 0 14px;font-family:var(--display);font-weight:400;font-size:26px;display:flex;justify-content:space-between;align-items:center}
+.paper{position:relative;background:#fffaf0;border:2px solid #d6b48a;border-radius:10px;color:var(--ink);text-shadow:none;max-height:330px;overflow:hidden;box-shadow:inset 0 2px 6px rgba(107,52,21,.15)}
+.paper ul{list-style:none;margin:0;padding:6px 14px}
+.paper li{display:grid;grid-template-columns:56px 28px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px dashed #e3c9a4;font-weight:700;font-size:14.5px;animation:drop .35s ease-out}
+.paper li:last-child{border-bottom:0}
+.paper li .t{color:#a0784f;font-size:12.5px;font-weight:800}
+.paper li .f{font-weight:900;color:#1f8f43;white-space:nowrap}
+@keyframes drop{from{opacity:0;transform:translateY(-8px)}}
+.tag{font-family:var(--body);font-weight:900;font-size:12px;letter-spacing:.06em;background:#ffe9c7;color:var(--wood3);border-radius:999px;padding:3px 10px;text-shadow:none}
+.ledger .row{position:relative;display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 0;border-bottom:2px dashed rgba(255,233,199,.35)}
+.ledger .row:last-of-type{border-bottom:0}
+.ledger .row span{font-weight:800;font-size:14px;color:#ffe9c7;text-shadow:none}
+.ledger .row b{font-family:var(--display);font-weight:400;font-size:24px}
+.ledger .note{position:relative;font-weight:700;font-size:13.5px;color:#ffe9c7;text-shadow:none;margin:14px 0 0}
+.ledger .note a{color:#fff}
+
+/* token */
+.token-card{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;padding:28px}
+.token-coin{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6c4,var(--coin) 45%,var(--coin2));border:5px solid #7a4b00;box-shadow:0 7px 0 #7a4b00,inset 0 -6px 0 rgba(122,75,0,.25);display:flex;align-items:center;justify-content:center;animation:spinY 4s ease-in-out infinite}
+@keyframes spinY{0%,100%{transform:rotateY(0)}50%{transform:rotateY(180deg)}}
+.token-coin svg{width:80px;height:80px}
+.token-card h3{position:relative;margin:0;font-family:var(--display);font-weight:400;font-size:42px;line-height:1}
+.token-card p{position:relative;margin:8px 0 14px;font-weight:700;color:#ffe9c7;text-shadow:none}
+.ca{position:relative;display:flex;align-items:center;gap:10px;width:100%;background:#fffaf0;border:2px dashed var(--wood3);border-radius:12px;padding:10px 14px;font:800 14px ui-monospace,Menlo,Consolas,monospace;color:var(--ink);text-shadow:none;cursor:pointer;text-align:left}
+.ca span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.token-btns{position:relative;display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+
+/* footer */
+footer{background:linear-gradient(180deg,#0e9fb8,#0b6f86);color:#e6fbff;padding:70px 0 40px;position:relative;margin-top:60px}
+footer:before{content:"";position:absolute;left:0;right:0;top:-28px;height:30px;background:radial-gradient(40px 30px at 20px 30px,#0e9fb8 98%,transparent 100%) repeat-x;background-size:40px 30px}
+.foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+.foot .brand{color:#fff}
+.disc{max-width:640px;font-weight:600;font-size:13.5px;line-height:1.6;opacity:.9}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;z-index:60;background:var(--cream);border:3px solid var(--wood3);border-radius:14px;padding:10px 18px;font-weight:800;box-shadow:0 5px 0 rgba(107,52,21,.4);transition:all .25s;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:1000px){
+  .nlinks{display:none}
+  .steps{grid-template-columns:1fr 1fr;row-gap:60px}
+  .agent-grid,.log-grid{grid-template-columns:1fr}
+  .agent-art{max-width:420px;margin:0 auto;width:100%}
+  .hud{position:relative;top:auto;right:auto;flex-direction:row;flex-wrap:wrap;margin:18px 0 0;padding:0 22px}
+  .hud .stat{min-width:0;flex:1}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .hero{min-height:auto}
+  .hero-ui{padding-top:80px;padding-bottom:44vh}
+  .steps{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr}
+  .token-card{grid-template-columns:1fr;text-align:center;justify-items:center}
+  .token-btns{justify-content:center}
+  .paper li{grid-template-columns:46px 24px 1fr;}
+  .paper li .f{grid-column:3}
+  .title-sign{padding:14px 22px 10px}
+  .hero-copy p{font-size:16px}
+  .btn{font-size:18px;padding:10px 18px}
+  .hud .stat b{font-size:22px}
+  .nav-r .btn.sm{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Agent Harbor home">
+      <svg width="36" height="36" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" fill="#24b6e6" stroke="#6b3415" stroke-width="2"/><path d="M6 19h20l-3 6H9z" fill="#c8642b" stroke="#5a2a10" stroke-width="1.5"/><rect x="11" y="11" width="10" height="8" rx="1.5" fill="#e0823d" stroke="#5a2a10" stroke-width="1.5"/><rect x="14.5" y="6" width="3" height="5" fill="#5a2a10"/></svg>
+      Agent Harbor
+    </a>
+    <nav class="nlinks" aria-label="Main"><a href="#how">How it works</a><a href="#agent">The Agent</a><a href="#log">Harbor Log</a><a href="#token">$HARBOR</a></nav>
+    <div class="nav-r">
+      <a class="plank btn sm icon-btn" id="xBtn" href="#" aria-label="Agent Harbor on X"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="position:relative;width:18px;height:18px;display:block;flex:none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="plank btn sm gold" id="buyTop" href="#"><span style="position:relative">Buy $HARBOR</span></a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- ================= HERO ================= -->
+  <section class="hero" aria-label="Agent Harbor">
+    <canvas id="scene" aria-label="Animated harbor: boats sail in, the harbor agent collects a dock fee from each one, then they sail away." role="img"></canvas>
+    <div class="hero-ui">
+      <div class="wrap">
+        <div class="plank title-sign"><span class="rope-hang l"></span><span class="rope-hang r"></span><span class="nail" style="left:10px;top:10px"></span><span class="nail" style="right:10px;top:10px"></span><span class="nail" style="left:10px;bottom:10px"></span><span class="nail" style="right:10px;bottom:10px"></span><h1>AGENT<span>HARBOR</span></h1></div>
+        <div class="hero-copy">
+          <div class="kick">A coin with a harbor master.</div>
+          <p>Every <b>$HARBOR</b> trade is a boat pulling into port. Our little agent works the docks all day and night, greeting every boat and collecting the dock fee.</p>
+        </div>
+        <div class="hero-btns">
+          <a class="plank btn gold" id="buyHero" href="#"><span style="position:relative">⚓ Buy $HARBOR</span></a>
+          <a class="plank btn teal" href="#how"><span style="position:relative">How it works</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="hud" aria-live="polite">
+      <div class="plank stat"><small>Boats served</small><b id="hBoats">0</b></div>
+      <div class="plank stat"><small>Dock fees collected</small><b><span class="coin-ic">◎</span><span id="hFees">0.000</span></b></div>
+      <div class="plank stat"><small>Agent status</small><b id="hStatus" style="font-size:22px">clocking in…</b></div>
+    </div>
+    <div class="sim-tag">⚓ harbor simulation · click a boat or the agent</div>
+    <div class="tip" id="tip"></div>
+    <a class="scroll-cue" href="#how">scroll ↓</a>
+  </section>
+
+  <!-- ================= HOW ================= -->
+  <section class="sec sand" id="how">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="ribbon">HOW IT WORKS</span><h2>Boats in. Fees collected. Repeat.</h2><p>The whole harbor runs on one simple loop, and the agent never clocks out.</p></div>
+      <div class="steps">
+        <article class="card reveal"><span class="n">01</span><div class="ico"><svg width="54" height="54" viewBox="0 0 64 64"><path d="M8 38h48l-6 12H14z" fill="#c8642b" stroke="#5a2a10" stroke-width="3" stroke-linejoin="round"/><rect x="22" y="24" width="20" height="14" rx="3" fill="#e0823d" stroke="#5a2a10" stroke-width="3"/><rect x="29" y="14" width="6" height="10" fill="#5a2a10"/><path d="M4 54q7-5 14 0t14 0 14 0 14 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div><h3>A trade sails in</h3><p>Every buy or sell of $HARBOR is a boat arriving at the harbor.</p></article>
+        <article class="card reveal"><span class="n">02</span><div class="ico"><svg width="54" height="54" viewBox="0 0 64 64"><circle cx="32" cy="34" r="20" fill="#ffcf33" stroke="#7a4b00" stroke-width="3"/><circle cx="32" cy="34" r="13" fill="none" stroke="#e8a20c" stroke-width="3"/><path d="M32 26v16M27 31h10" stroke="#7a4b00" stroke-width="3" stroke-linecap="round"/></svg></div><h3>It pays the dock fee</h3><p>Trades on pump.fun generate creator fees. In the harbor, that's the dock fee.</p></article>
+        <article class="card reveal"><span class="n">03</span><div class="ico"><svg width="54" height="54" viewBox="0 0 64 64"><rect x="18" y="22" width="28" height="26" rx="9" fill="#f1f5f9" stroke="#2b3a4a" stroke-width="3"/><rect x="23" y="28" width="18" height="12" rx="4" fill="#16314d"/><circle cx="28" cy="34" r="2.5" fill="#5ff2ff"/><circle cx="36" cy="34" r="2.5" fill="#5ff2ff"/><path d="M14 22h36l-4-8H18z" fill="#fff" stroke="#16314d" stroke-width="3" stroke-linejoin="round"/><rect x="14" y="20" width="36" height="5" fill="#16314d"/></svg></div><h3>The agent collects</h3><p>The harbor agent greets each boat, collects the fee and stacks it in the harbor vault.</p></article>
+        <article class="card reveal"><span class="n">04</span><div class="ico"><svg width="54" height="54" viewBox="0 0 64 64"><rect x="14" y="12" width="36" height="42" rx="4" fill="#fffaf0" stroke="#6b3415" stroke-width="3"/><path d="M21 24h22M21 32h22M21 40h14" stroke="#c8743a" stroke-width="3" stroke-linecap="round"/><circle cx="44" cy="44" r="9" fill="#2fbf5a" stroke="#1a6b35" stroke-width="3"/><path d="M40 44l3 3 5-6" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3>The log is public</h3><p>Harbor reports go out on X, and the fee wallet is public so anyone can check it.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= AGENT ================= -->
+  <section class="sec water" id="agent">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="ribbon">MEET THE AGENT</span><h2>Your harbor master.</h2><p>Small, shiny, wears the hat. Takes the job very seriously.</p></div>
+      <div class="agent-grid">
+        <div class="agent-art reveal"><canvas id="agentArt" width="420" height="420" aria-label="The harbor agent: a small white robot in a captain's hat and orange life vest" role="img"></canvas><div class="bubble" id="agentSays">Ahoy! Dock fee, please. ⚓</div></div>
+        <div class="reveal">
+          <h3 class="agent-name">Cap'n Bolt</h3>
+          <div class="agent-sub">Harbor Agent · on duty 24/7</div>
+          <p class="agent-copy">Cap'n Bolt runs Agent Harbor by a short list of rules painted on the dock. It does its job, and only its job. Here's what it can and can't do:</p>
+          <div class="rules" id="rules"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LOG ================= -->
+  <section class="sec sand" id="log">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="ribbon">HARBOR LOG</span><h2>Today at the docks.</h2><p>Every boat Cap'n Bolt greets lands in the log.</p></div>
+      <div class="log-grid">
+        <div class="plank board reveal"><h3><span>Dock log</span><span class="tag" id="logTag">SIMULATION</span></h3><div class="paper"><ul id="logList" aria-live="off"></ul></div></div>
+        <div class="plank board ledger reveal">
+          <h3><span>Harbor vault</span><span class="tag">SIMULATION</span></h3>
+          <div class="row"><span>Boats served</span><b id="lBoats">0</b></div>
+          <div class="row"><span>Dock fees collected</span><b id="lFees">◎ 0.000</b></div>
+          <div class="row"><span>Busiest berth</span><b id="lBerth">—</b></div>
+          <div class="row"><span>Agent uptime</span><b id="lUp">0m</b></div>
+          <p class="note" id="vaultNote"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TOKEN ================= -->
+  <section class="sec water" id="token">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="ribbon">$HARBOR</span><h2>Get your boat in the water.</h2></div>
+      <div class="plank token-card reveal">
+        <div class="token-coin" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 8v40M20 18h24" stroke="#7a4b00" stroke-width="5" stroke-linecap="round"/><circle cx="32" cy="12" r="5" fill="none" stroke="#7a4b00" stroke-width="4"/><path d="M12 36q2 14 20 16 18-2 20-16" fill="none" stroke="#7a4b00" stroke-width="5" stroke-linecap="round"/><path d="M8 38l4-6 5 5M56 38l-4-6-5 5" fill="none" stroke="#7a4b00" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h3>$HARBOR</h3>
+          <p>The coin of Agent Harbor, launching on Solana via pump.fun.</p>
+          <a class="ca" id="launchBox" href="https://x.com/AgentHarborAI" target="_blank" rel="noopener noreferrer" style="text-decoration:none"><span>🚀 The launch will be announced on X: @AgentHarborAI</span><b>↗</b></a>
+          <div class="token-btns">
+            <a class="plank btn gold" id="buyBtn" href="#"><span style="position:relative">Buy on pump.fun</span></a>
+            <a class="plank btn teal" id="chartBtn" href="#"><span style="position:relative">Chart</span></a>
+            <a class="plank btn" id="xBtn2" href="#"><span style="position:relative">Follow on X</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><a class="brand" href="#top">⚓ Agent Harbor</a><p style="font-weight:800;margin:8px 0 0">$HARBOR · a coin with a harbor master · <a href="#" id="xFoot">@AgentHarborAI</a></p></div>
+    <p class="disc">$HARBOR is a community meme coin on Solana. The harbor on this page is an animated simulation that shows the idea; the boats, fees and log entries are not live blockchain data. Nothing here is financial advice and no returns are promised. Meme coins are very risky and can lose all their value. The launch will be announced on our official X: @AgentHarborAI.</p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+'use strict';
+/* =====================================================================
+   EDIT THESE when you launch (leave '' until ready)
+   ===================================================================== */
+var CONFIG = {
+  buyUrl:    '',   // pump.fun page (buttons go to X until set)
+  chartUrl:  '',   // chart link (goes to X until set)
+  xUrl:      'https://x.com/AgentHarborAI',
+  feeWallet: '',   // public wallet that receives creator fees (shows a "verify on Solscan" link)
+  // The agent's rules shown on the site. Only list things that are actually true.
+  canDo:  ['Greet every boat ($HARBOR trade) that docks','Collect the dock fee (pump.fun creator fees)','Post harbor reports on X','Keep the fee wallet public so anyone can check it'],
+  cantDo: ['Touch your wallet or your bags','Ask for your seed phrase, ever','Promise you returns','Close the harbor early']
+};
+
+/* ---------- utils ---------- */
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){e.classList.remove('on')},2200)}
+function copy(t){var ok=function(){toast('Copied! ⚓')};try{navigator.clipboard.writeText(t).then(ok,function(){fb();ok()})}catch(e){fb();ok()}function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}a.remove()}}
+
+/* ---------- links ---------- */
+function wire(el,url){if(!el)return;el.href=url||CONFIG.xUrl;el.target='_blank';el.rel='noopener noreferrer'}
+['#xBtn','#xBtn2','#xFoot'].forEach(function(s){wire($(s),CONFIG.xUrl,'X')});
+['#buyTop','#buyHero','#buyBtn'].forEach(function(s){wire($(s),CONFIG.buyUrl,'Buy')});
+wire($('#chartBtn'),CONFIG.chartUrl);
+$('#vaultNote').innerHTML=CONFIG.feeWallet?'Real fee wallet: <a href="https://solscan.io/account/'+encodeURIComponent(CONFIG.feeWallet)+'" target="_blank" rel="noopener noreferrer">verify on Solscan ↗</a>':'These numbers come from the harbor simulation. The real fee wallet will be posted on X at launch so anyone can check it.';
+addEventListener('scroll',function(){$('#nav').classList.toggle('solid',scrollY>40)},{passive:true});
+
+/* ---------- rules ---------- */
+$('#rules').innerHTML='<div class="card can"><h4>✔ Can</h4><ul>'+CONFIG.canDo.map(function(r){return '<li><i>✓</i>'+esc(r)+'</li>'}).join('')+'</ul></div><div class="card cant"><h4>✖ Can\'t</h4><ul>'+CONFIG.cantDo.map(function(r){return '<li><i>✕</i>'+esc(r)+'</li>'}).join('')+'</ul></div>';
+
+/* =====================================================================
+   DRAWING HELPERS (all original art)
+   ===================================================================== */
+function rr(x,X,Y,W,H,R){x.beginPath();x.moveTo(X+R,Y);x.arcTo(X+W,Y,X+W,Y+H,R);x.arcTo(X+W,Y+H,X,Y+H,R);x.arcTo(X,Y+H,X,Y,R);x.arcTo(X,Y,X+W,Y,R);x.closePath()}
+var OUT='#4a220c';
+function stroke(x,w){x.lineWidth=w||3;x.strokeStyle=OUT;x.lineJoin='round';x.lineCap='round';x.stroke()}
+
+/* the harbor agent: little white robot, captain hat, orange life vest */
+function drawAgent(x,cx,cy,s,t,opts){
+  opts=opts||{};x.save();x.translate(cx,cy);x.scale(s,s);
+  var walk=opts.walking?Math.sin(t/90):0,bounce=opts.walking?Math.abs(Math.sin(t/90))*-2:Math.sin(t/500)*-1.2;
+  x.translate(0,bounce);if(opts.flip)x.scale(-1,1);
+  // shadow
+  x.save();x.translate(0,-bounce);x.fillStyle='rgba(0,0,0,.18)';x.beginPath();x.ellipse(0,26,18,4.5,0,0,7);x.fill();x.restore();
+  // legs
+  x.fillStyle='#2b3a4a';rr(x,-10,12+walk*2,7,13-walk*2,3);x.fill();rr(x,3,12-walk*2,7,13+walk*2,3);x.fill();
+  x.fillStyle='#16314d';rr(x,-12,23+walk*2,10,5,2.5);x.fill();rr(x,2,23-walk*2,10,5,2.5);x.fill();
+  // arms
+  var wave=opts.collect?Math.sin(t/70)*0.6-0.9:walk*0.4;
+  x.save();x.translate(-17,-2);x.rotate(.25+(opts.collect?0:walk*.3));x.fillStyle='#e9eef3';rr(x,-3.5,0,7,16,3.5);x.fill();stroke(x,2.2);x.restore();
+  x.save();x.translate(17,-2);x.rotate(-.25+wave);x.fillStyle='#e9eef3';rr(x,-3.5,0,7,16,3.5);x.fill();stroke(x,2.2);
+  if(opts.collect){x.translate(0,17);drawCoin(x,0,0,6,t)}x.restore();
+  // body
+  var g=x.createLinearGradient(0,-12,0,16);g.addColorStop(0,'#ffffff');g.addColorStop(1,'#cfd8e2');x.fillStyle=g;rr(x,-17,-12,34,30,12);x.fill();stroke(x,2.6);
+  // vest
+  x.fillStyle='#ff8a2a';x.beginPath();x.moveTo(-15,-6);x.lineTo(-5,-6);x.lineTo(-3,16);x.lineTo(-13,15);x.closePath();x.fill();x.beginPath();x.moveTo(15,-6);x.lineTo(5,-6);x.lineTo(3,16);x.lineTo(13,15);x.closePath();x.fill();
+  x.fillStyle='#fff';x.fillRect(-13.5,4,9,2.5);x.fillRect(4.5,4,9,2.5);
+  // head
+  x.fillStyle=g;rr(x,-19,-40,38,30,13);x.fill();stroke(x,2.6);
+  x.fillStyle='#16314d';rr(x,-13,-34,26,18,7);x.fill();
+  var bl=(t%3800)<120;x.fillStyle='#5ff2ff';x.shadowColor='#5ff2ff';x.shadowBlur=6;
+  if(bl){x.fillRect(-8,-25,6,2);x.fillRect(2,-25,6,2)}else{x.beginPath();x.ellipse(-5,-25,3,3.6,0,0,7);x.ellipse(5,-25,3,3.6,0,0,7);x.fill()}
+  x.shadowBlur=0;x.strokeStyle='#5ff2ff';x.lineWidth=1.6;x.beginPath();x.arc(0,-21,3.4,.25,Math.PI-.25);x.stroke();
+  // cheeks
+  x.fillStyle='rgba(255,120,150,.55)';x.beginPath();x.ellipse(-10,-19,2.4,1.4,0,0,7);x.ellipse(10,-19,2.4,1.4,0,0,7);x.fill();
+  // captain hat
+  x.fillStyle='#16314d';rr(x,-21,-45,42,7,3.5);x.fill();stroke(x,2.2);
+  x.fillStyle='#ffffff';x.beginPath();x.moveTo(-17,-44);x.quadraticCurveTo(-18,-58,0,-59);x.quadraticCurveTo(18,-58,17,-44);x.closePath();x.fill();stroke(x,2.2);
+  x.fillStyle='#ffcf33';x.beginPath();x.arc(0,-50,4,0,7);x.fill();x.strokeStyle='#7a4b00';x.lineWidth=1.4;x.stroke();
+  // antenna
+  x.strokeStyle=OUT;x.lineWidth=2;x.beginPath();x.moveTo(12,-56);x.lineTo(16,-64);x.stroke();x.fillStyle='#ff5a5a';x.beginPath();x.arc(16,-65,2.6,0,7);x.fill();
+  x.restore();
+}
+function drawCoin(x,cx,cy,r,t){var sq=Math.abs(Math.cos(t/220));x.save();x.translate(cx,cy);x.scale(Math.max(.18,sq),1);
+  var g=x.createRadialGradient(-r*.3,-r*.3,0,0,0,r);g.addColorStop(0,'#fff4b8');g.addColorStop(.5,'#ffcf33');g.addColorStop(1,'#e8a20c');x.fillStyle=g;x.beginPath();x.arc(0,0,r,0,7);x.fill();x.lineWidth=Math.max(1,r*.22);x.strokeStyle='#7a4b00';x.stroke();
+  if(r>5){x.fillStyle='#7a4b00';x.font='900 '+(r*1.1)+'px Nunito,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('◎',0,r*.05)}x.restore()}
+
+/* tugboat: wooden hull, cabin, chimney, cargo crate */
+var HULLS=[['#c8642b','#8a3d16'],['#d94b3c','#8e2a20'],['#2f8fd8','#1b5a8e'],['#3db45a','#1f7536'],['#e5a83a','#9a6a14'],['#8f5bd6','#5a3394']];
+function drawBoat(x,b,t){
+  x.save();x.translate(b.x,b.y);var s=b.s*(b.k||1);x.scale(s*(b.dir<0?-1:1),s);
+  var bob=Math.sin(t/420+b.seed)*2,tilt=Math.sin(t/600+b.seed)*.04;x.translate(0,bob);x.rotate(tilt);
+  // wake
+  if(b.moving){x.fillStyle='rgba(255,255,255,.55)';for(var i=0;i<4;i++){x.beginPath();x.ellipse(-58-i*14,16+Math.sin(t/120+i)*1.5,10-i*1.8,3,0,0,7);x.fill()}}
+  // hull
+  var c=HULLS[b.color];x.fillStyle=c[0];x.beginPath();x.moveTo(-52,0);x.lineTo(56,0);x.quadraticCurveTo(54,18,40,22);x.lineTo(-40,22);x.quadraticCurveTo(-52,18,-52,0);x.closePath();x.fill();stroke(x,3);
+  x.fillStyle=c[1];x.beginPath();x.moveTo(-48,12);x.lineTo(52,12);x.quadraticCurveTo(48,20,40,22);x.lineTo(-40,22);x.quadraticCurveTo(-48,19,-48,12);x.fill();
+  x.strokeStyle='rgba(74,34,12,.4)';x.lineWidth=1.5;x.beginPath();x.moveTo(-48,6);x.lineTo(54,6);x.stroke();
+  // tyres
+  x.fillStyle='#2b2b2b';[-30,-6,18].forEach(function(px){x.beginPath();x.ellipse(px,9,4.5,4,0,0,7);x.fill()});
+  // deck rim
+  x.fillStyle='#f0c48a';rr(x,-54,-4,112,6,3);x.fill();stroke(x,2.4);
+  // cabin
+  x.fillStyle='#e9883f';rr(x,-24,-30,40,27,5);x.fill();stroke(x,2.6);
+  x.fillStyle='#ffe8b0';rr(x,-24,-34,40,7,3);x.fill();stroke(x,2.2);
+  x.fillStyle='#7fe0ff';rr(x,-18,-24,12,10,2.5);x.fill();stroke(x,2);rr(x,0,-24,10,10,2.5);x.fill();stroke(x,2);
+  // chimney
+  x.fillStyle='#5a2a10';rr(x,-12,-50,9,17,2);x.fill();stroke(x,2.2);x.fillStyle='#ff5a5a';x.fillRect(-12,-46,9,4);
+  if(b.moving&&!reduce){for(i=0;i<3;i++){var ph=((t/700+i/3+b.seed)%1);x.fillStyle='rgba(255,255,255,'+(.7-ph*.7)+')';x.beginPath();x.arc(-8-ph*16,-54-ph*26,4+ph*7,0,7);x.fill()}}
+  // cargo crate
+  if(b.cargo){x.fillStyle='#d99a55';rr(x,22,-22,26,20,2);x.fill();stroke(x,2.4);x.strokeStyle='#8a5323';x.lineWidth=2;x.beginPath();x.moveTo(22,-12);x.lineTo(48,-12);x.moveTo(26,-22);x.lineTo(44,-2);x.stroke()}
+  // flag
+  x.strokeStyle=OUT;x.lineWidth=2;x.beginPath();x.moveTo(-40,-2);x.lineTo(-40,-34);x.stroke();x.fillStyle=b.side==='buy'?'#2fbf5a':'#ff8a2a';x.beginPath();x.moveTo(-40,-34);x.lineTo(-24,-30+Math.sin(t/150)*1.5);x.lineTo(-40,-25);x.fill();
+  x.restore();
+}
+function drawPalm(x,px,py,s,t,flip){
+  x.save();x.translate(px,py);x.scale(s*(flip?-1:1),s);var sw=Math.sin(t/1400+px)*.04;
+  x.fillStyle='#b9793f';x.beginPath();x.moveTo(-8,0);x.quadraticCurveTo(-6,-80,18,-150);x.lineTo(28,-146);x.quadraticCurveTo(8,-80,8,0);x.closePath();x.fill();stroke(x,3);
+  x.strokeStyle='rgba(74,34,12,.35)';x.lineWidth=2;for(var i=1;i<9;i++){var yy=-i*16;x.beginPath();x.moveTo(-6+i*1.6,yy);x.lineTo(7+i*2,yy-3);x.stroke()}
+  x.translate(23,-150);x.rotate(sw);
+  var L=[[-2.6,70],[-2.1,78],[-1.4,64],[-.6,74],[0,62],[.6,70],[-3.1,58]];
+  L.forEach(function(l,i){x.save();x.rotate(l[0]+Math.sin(t/900+i)*.04);x.fillStyle=i%2?'#3fbf4f':'#2fa843';x.beginPath();x.moveTo(0,0);x.quadraticCurveTo(l[1]*.5,-22,l[1],8);x.quadraticCurveTo(l[1]*.5,-4,0,6);x.closePath();x.fill();stroke(x,2.6);x.restore()});
+  x.fillStyle='#7a4b20';[[-6,4],[6,6],[0,10]].forEach(function(c){x.beginPath();x.arc(c[0],c[1],6,0,7);x.fill();stroke(x,2)});
+  x.restore();
+}
+function drawHut(x,px,py,s){
+  x.save();x.translate(px,py);x.scale(s,s);
+  x.fillStyle='#8a5323';[-40,-14,14,40].forEach(function(lx){x.fillRect(lx-3,-10,6,46)});
+  x.fillStyle='#d99a55';rr(x,-50,-14,100,10,3);x.fill();stroke(x,2.6);
+  x.fillStyle='#e9b46e';rr(x,-42,-62,84,48,4);x.fill();stroke(x,2.6);
+  x.strokeStyle='rgba(74,34,12,.35)';x.lineWidth=2;for(var i=-34;i<42;i+=12){x.beginPath();x.moveTo(i,-60);x.lineTo(i,-16);x.stroke()}
+  x.fillStyle='#5a2a10';rr(x,-12,-46,24,32,3);x.fill();
+  x.fillStyle='#f2c14e';x.beginPath();x.moveTo(-60,-58);x.lineTo(0,-100);x.lineTo(60,-58);x.closePath();x.fill();stroke(x,3);
+  x.strokeStyle='#c99a2e';x.lineWidth=2;for(i=-48;i<50;i+=10){x.beginPath();x.moveTo(i,-60);x.lineTo(i*.4,-88);x.stroke()}
+  x.restore();
+}
+
+/* =====================================================================
+   HARBOR SCENE
+   ===================================================================== */
+var sim={boats:0,fees:0,berthCount:[0,0,0,0],start:Date.now(),log:[]};
+var scene=(function(){
+  var cv=$('#scene'),x=cv.getContext('2d'),W=0,H=0,dpr=Math.min(2,devicePixelRatio||1),r=rng(7);
+  var horizon,dockY,berths=[],boats=[],agent={x:0,target:null,state:'idle',t0:0,flip:false},pops=[],gulls=[],clouds=[],hover=null,last=performance.now();
+  var mouse={x:-1,y:-1};
+  function layout(){var b=cv.getBoundingClientRect();W=b.width;H=b.height;cv.width=W*dpr;cv.height=H*dpr;
+    horizon=H*.38;dockY=H*.86;var n=W<640?3:4,left=W<640?W*.18:W*.36,right=W*.95;berths=[];for(var i=0;i<n;i++)berths.push({x:left+(right-left)*(i+.5)/n,boat:null,i:i});
+    agent.x=agent.x||berths[0].x;clouds=[];for(i=0;i<5;i++)clouds.push({x:r()*W,y:H*.06+r()*H*.14,s:.6+r()*.7,v:.08+r()*.12});gulls=[];for(i=0;i<3;i++)gulls.push({x:r()*W,y:H*.1+r()*H*.15,v:.4+r()*.4,ph:r()*6})}
+  layout();var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(layout,120)});
+  var boatScale=function(){return Math.max(.5,Math.min(1.05,W/1300))};
+  function spawn(){
+    var free=berths.filter(function(b){return !b.boat});if(!free.length)return;var be=free[Math.random()*free.length|0];
+    var fromLeft=Math.random()<.5,side=Math.random()<.55?'buy':'sell';
+    var k=boatScale(),b={k:k,berth:be,x:fromLeft?-80:W+80,y:horizon+H*.1,tx:be.x-6*k,ty:dockY-H*.13,s:.4,dir:fromLeft?1:-1,color:Math.random()*HULLS.length|0,seed:Math.random()*10,state:'in',moving:true,cargo:Math.random()<.75,side:side,sol:+(0.05+Math.random()*Math.random()*4).toFixed(3),id:1000+sim.boats+boats.length,paid:false};
+    be.boat=b;boats.push(b)}
+  function feeFor(b){return +(b.sol*0.0095).toFixed(4)} // illustrative only
+  function addLog(b,fee){var now=new Date(),li=document.createElement('li');
+    li.innerHTML='<span class="t">'+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(now.getSeconds()).padStart(2,'0')+'</span><span>'+(b.side==='buy'?'🟢':'🟠')+'</span><span>Boat #'+b.id+' docked at berth '+(b.berth.i+1)+' · '+b.side+' '+b.sol+' ◎</span><span class="f">+'+fee.toFixed(4)+' ◎</span>';
+    var ul=$('#logList');ul.insertBefore(li,ul.firstChild);while(ul.children.length>9)ul.lastChild.remove()}
+  function updateStats(){$('#hBoats').textContent=sim.boats.toLocaleString();$('#hFees').textContent=sim.fees.toFixed(3);$('#lBoats').textContent=sim.boats.toLocaleString();$('#lFees').textContent='◎ '+sim.fees.toFixed(3);
+    var mx=Math.max.apply(null,sim.berthCount);$('#lBerth').textContent=mx?'Berth '+(sim.berthCount.indexOf(mx)+1):'—'}
+  function status(s){if(status.s!==s){status.s=s;$('#hStatus').textContent=s}}
+  var spawnT=0,seeded=false;
+  function step(t,dt){
+    if(!seeded){seeded=true;spawn();spawn();boats.forEach(function(b,i){b.x=b.tx+(b.x<b.tx?-1:1)*(40+i*120);b.y=b.ty-20-i*30;b.s=.9})}
+    spawnT-=dt;if(spawnT<=0){spawn();spawnT=1200+Math.random()*2200}
+    var sc=boatScale();
+    boats.forEach(function(b){
+      if(b.state==='in'){var dx=b.tx-b.x,dy=b.ty-b.y,d=Math.hypot(dx,dy),sp=Math.min(d,dt*.2*sc*(.6+b.s));b.x+=dx/d*sp||0;b.y+=dy/d*sp||0;b.s=.4+(b.y-(horizon+H*.1))/((b.ty)-(horizon+H*.1))*.6;b.dir=dx>=0?1:-1;if(d<2){b.state='docked';b.moving=false;b.dockT=t}}
+      else if(b.state==='out'){b.x+=b.dir*dt*.12*sc;b.y-=dt*.03*sc;b.s=Math.max(.35,b.s-dt*.0004);if(b.x<-140||b.x>W+140){b.dead=true;b.berth.boat=null}}
+    });
+    boats=boats.filter(function(b){return !b.dead});
+    // agent AI: walk to the oldest unpaid docked boat
+    if(agent.state==='idle'||agent.state==='walk'){
+      var todo=boats.filter(function(b){return b.state==='docked'&&!b.paid}).sort(function(a,b){return a.dockT-b.dockT})[0];
+      if(todo){agent.target=todo;agent.state='walk'}
+      if(agent.state==='walk'){var dx=agent.target.x-agent.x;agent.flip=dx<0;var sp=dt*.16*Math.max(.7,W/1400);if(Math.abs(dx)<=sp){agent.x=agent.target.x;agent.state='collect';agent.t0=t;status('collecting fee')}else{agent.x+=Math.sign(dx)*sp;status('walking to berth '+(agent.target.berth.i+1))}}
+      else status('waiting for boats');
+    }
+    if(agent.state==='collect'&&t-agent.t0>900){var b=agent.target,fee=feeFor(b);b.paid=true;sim.boats++;sim.fees+=fee;sim.berthCount[b.berth.i]++;
+      pops.push({x:agent.x,y:dockY-H*.07,t:t,txt:'+'+fee.toFixed(4)+' ◎'});addLog(b,fee);updateStats();
+      setTimeout(function(){b.state='out';b.moving=true;b.dir=Math.random()<.5?-1:1},600);agent.state='idle';agent.target=null}
+  }
+  function draw(t){
+    var g=x.createLinearGradient(0,0,0,horizon);g.addColorStop(0,'#5cc6fa');g.addColorStop(1,'#c8f0ff');x.fillStyle=g;x.fillRect(0,0,W,horizon+2);
+    // sun
+    x.fillStyle='rgba(255,240,170,.55)';x.beginPath();x.arc(W*.8,H*.12,H*.09,0,7);x.fill();x.fillStyle='#fff3b0';x.beginPath();x.arc(W*.8,H*.12,H*.055,0,7);x.fill();
+    // clouds
+    clouds.forEach(function(c){c.x+=c.v;if(c.x>W+120)c.x=-160;x.fillStyle='rgba(255,255,255,.95)';x.save();x.translate(c.x,c.y);x.scale(c.s,c.s);[[0,0,26],[24,-10,30],[52,0,24],[26,8,26]].forEach(function(p){x.beginPath();x.arc(p[0],p[1],p[2],0,7);x.fill()});x.restore()});
+    // distant islands
+    x.fillStyle='#4fbf74';x.beginPath();x.moveTo(W*.02,horizon);x.quadraticCurveTo(W*.12,horizon-H*.07,W*.24,horizon);x.fill();x.fillStyle='#3aa862';x.beginPath();x.moveTo(W*.55,horizon);x.quadraticCurveTo(W*.66,horizon-H*.05,W*.78,horizon);x.fill();
+    x.fillStyle='#f6d58b';x.fillRect(W*.02,horizon-2,W*.22,3);
+    // distant bridge silhouette
+    x.fillStyle='rgba(120,70,40,.5)';x.fillRect(W*.3,horizon-H*.035,W*.2,H*.012);for(var i=0;i<5;i++)x.fillRect(W*.3+i*W*.05,horizon-H*.035,W*.006,H*.035);
+    x.fillRect(W*.29,horizon-H*.07,W*.012,H*.07);x.fillRect(W*.495,horizon-H*.07,W*.012,H*.07);
+    // sea
+    g=x.createLinearGradient(0,horizon,0,H);g.addColorStop(0,'#5fd6f2');g.addColorStop(.35,'#25b8e3');g.addColorStop(1,'#0a86c0');x.fillStyle=g;x.fillRect(0,horizon,W,H-horizon);
+    // wave glints
+    x.strokeStyle='rgba(255,255,255,.55)';x.lineWidth=2;x.lineCap='round';
+    for(var row=0;row<14;row++){var yy=horizon+8+row*row*(H-horizon)/210,amp=1+row*.3;for(var k=0;k<7;k++){var wx=((k*W/6+row*70+t*.02*(1+row*.1))%(W+120))-60;x.beginPath();x.moveTo(wx,yy);x.quadraticCurveTo(wx+8+row,yy-amp,wx+16+row*2,yy);x.stroke()}}
+    // gulls
+    gulls.forEach(function(gu){gu.x+=gu.v;if(gu.x>W+40)gu.x=-40;var f=Math.sin(t/160+gu.ph)*4;x.strokeStyle='#2b3a4a';x.lineWidth=2;x.beginPath();x.moveTo(gu.x-9,gu.y+f*-.5);x.quadraticCurveTo(gu.x-4,gu.y-4-f,gu.x,gu.y);x.quadraticCurveTo(gu.x+4,gu.y-4-f,gu.x+9,gu.y+f*-.5);x.stroke()});
+    // finger piers (berths)
+    var py=dockY-H*.13;
+    berths.forEach(function(b){var w=Math.max(20,W*.022),k=boatScale();
+      x.fillStyle='#c98a4b';var bx=b.x+62*k+w/2;x.fillRect(bx-w/2,py-10,w,dockY-py+12);x.strokeStyle=OUT;x.lineWidth=2.4;x.strokeRect(bx-w/2,py-10,w,dockY-py+12);
+      x.strokeStyle='rgba(74,34,12,.35)';x.lineWidth=1.5;for(var yy2=py;yy2<dockY;yy2+=9){x.beginPath();x.moveTo(bx-w/2,yy2);x.lineTo(bx+w/2,yy2);x.stroke()}
+      x.fillStyle='#f6d58b';rr(x,bx-w*.35,py-24,w*.7,14,3);x.fill();stroke(x,2);x.fillStyle=OUT;x.font='900 '+Math.round(Math.max(9,w*.34))+'px Nunito,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(b.i+1,bx,py-17)});
+    // boats sorted by y
+    boats.slice().sort(function(a,b){return a.y-b.y}).forEach(function(b){drawBoat(x,b,t);if(hover===b){x.strokeStyle='rgba(255,255,255,.9)';x.lineWidth=3;x.setLineDash([6,6]);x.beginPath();x.ellipse(b.x,b.y+8*b.s*b.k,70*b.s*b.k,30*b.s*b.k,0,0,7);x.stroke();x.setLineDash([])}});
+    // main dock
+    var dh=H-dockY;x.fillStyle='#8a5323';for(i=0;i<W;i+=70)x.fillRect(i+20,dockY,10,dh);
+    g=x.createLinearGradient(0,dockY,0,dockY+dh*.55);g.addColorStop(0,'#e0a463');g.addColorStop(1,'#b8733a');x.fillStyle=g;x.fillRect(0,dockY,W,dh*.55);
+    x.strokeStyle='rgba(74,34,12,.4)';x.lineWidth=2;for(i=0;i<W;i+=46){x.beginPath();x.moveTo(i,dockY);x.lineTo(i,dockY+dh*.55);x.stroke()}
+    x.fillStyle=OUT;x.fillRect(0,dockY+dh*.55-3,W,3);x.fillRect(0,dockY-2,W,3);
+    // crates + barrels on dock
+    [[.06,0],[.1,1],[.27,0],[.93,1]].forEach(function(c,i){var cx=W*c[0],cy=dockY-4;if(c[1]){x.fillStyle='#9b5a2a';rr(x,cx-12,cy-26,24,28,6);x.fill();stroke(x,2.4);x.strokeStyle='#5a2a10';x.lineWidth=2;x.beginPath();x.moveTo(cx-12,cy-17);x.lineTo(cx+12,cy-17);x.moveTo(cx-12,cy-6);x.lineTo(cx+12,cy-6);x.stroke()}else{x.fillStyle='#d99a55';rr(x,cx-18,cy-30,36,32,3);x.fill();stroke(x,2.6);x.strokeStyle='#8a5323';x.lineWidth=2;x.beginPath();x.moveTo(cx-18,cy-14);x.lineTo(cx+18,cy-14);x.moveTo(cx-14,cy-30);x.lineTo(cx+14,cy+2);x.stroke()}});
+    // vault chest at left of dock
+    var vx=W*.17,vy=dockY-2;x.fillStyle='#a8612e';rr(x,vx-26,vy-32,52,34,5);x.fill();stroke(x,2.6);x.fillStyle='#ffcf33';x.fillRect(vx-26,vy-22,52,5);x.fillRect(vx-4,vy-30,8,12);x.strokeStyle=OUT;x.lineWidth=2;x.strokeRect(vx-4,vy-30,8,12);
+    var pile=Math.min(8,Math.floor(sim.boats/3));for(i=0;i<pile;i++)drawCoin(x,vx-18+i*5,vy-36-(i%3)*3,5,t+i*90);
+    x.fillStyle='#fffaf0';rr(x,vx-24,vy-58,48,15,4);x.fill();stroke(x,2);x.fillStyle=OUT;x.font='900 10px Nunito,sans-serif';x.textAlign='center';x.fillText('VAULT',vx,vy-50);
+    // left hut + palms (foreground)
+    if(W>640){drawHut(x,W*.06,dockY-H*.02,Math.min(1,W/1500));}
+    drawPalm(x,W*.015,dockY+dh*.4,Math.min(1.15,H/700),t,false);drawPalm(x,W*.985,dockY+dh*.4,Math.min(1.1,H/720),t,true);
+    // agent
+    var ag=Math.max(.75,Math.min(1.25,W/1150));drawAgent(x,agent.x,dockY+dh*.18,ag,t,{walking:agent.state==='walk',collect:agent.state==='collect',flip:agent.flip});
+    if(hover==='agent'){x.strokeStyle='rgba(255,255,255,.95)';x.lineWidth=3;x.setLineDash([6,6]);x.beginPath();x.ellipse(agent.x,dockY+dh*.18+26*ag,30*ag,8*ag,0,0,7);x.stroke();x.setLineDash([])}
+    // fee pops
+    pops=pops.filter(function(p){var a=(t-p.t)/1600;if(a>1)return false;x.globalAlpha=1-a;drawCoin(x,p.x-34,p.y-a*60,9,t);x.fillStyle='#fff';x.strokeStyle=OUT;x.lineWidth=4;x.font='900 18px Nunito,sans-serif';x.textAlign='left';x.strokeText(p.txt,p.x-20,p.y-a*60+6);x.fillText(p.txt,p.x-20,p.y-a*60+6);x.globalAlpha=1;return true});
+  }
+  function frame(now){requestAnimationFrame(frame);var dt=Math.min(60,now-last);last=now;if(document.hidden)return;step(now,reduce?dt*.5:dt);draw(now)}
+  requestAnimationFrame(frame);
+  (function(){var now=Date.now();for(var i=4;i>=1;i--){var side=Math.random()<.55?'buy':'sell',sol=+(0.05+Math.random()*Math.random()*4).toFixed(3),fee=+(sol*0.0095).toFixed(4),be=Math.random()*berths.length|0,d=new Date(now-i*47000),li=document.createElement('li');sim.boats++;sim.fees+=fee;sim.berthCount[be]++;
+    li.innerHTML='<span class="t">'+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+'</span><span>'+(side==='buy'?'🟢':'🟠')+'</span><span>Boat #'+(995+5-i)+' docked at berth '+(be+1)+' · '+side+' '+sol+' ◎</span><span class="f">+'+fee.toFixed(4)+' ◎</span>';var ul=$('#logList');ul.insertBefore(li,ul.firstChild)}updateStats()})();
+  // interaction
+  var tip=$('#tip');
+  function pick(mx,my){var ag=Math.max(.75,Math.min(1.25,W/1150)),ay=dockY+(H-dockY)*.18;if(Math.abs(mx-agent.x)<26*ag&&my>ay-62*ag&&my<ay+28*ag)return 'agent';
+    var hit=null;boats.forEach(function(b){var s=b.s*(b.k||1);if(Math.abs(mx-b.x)<58*s&&my>b.y-50*s&&my<b.y+24*s)hit=b});return hit}
+  var SAYS=['Ahoy! Dock fee, please. ⚓','Berth '+'free! Next boat!','I never clock out.','Another boat! Another fee!','Hat stays on. Always.','The vault is getting heavy…'];
+  cv.addEventListener('pointermove',function(e){var b=cv.getBoundingClientRect();mouse.x=e.clientX-b.left;mouse.y=e.clientY-b.top;hover=pick(mouse.x,mouse.y);
+    if(hover){tip.classList.add('on');tip.style.left=mouse.x+'px';tip.style.top=mouse.y+'px';tip.textContent=hover==='agent'?'Cap\'n Bolt · '+$('#hStatus').textContent:'Boat #'+hover.id+' · '+hover.side+' '+hover.sol+' ◎ · '+(hover.paid?'fee paid ✓':hover.state==='docked'?'waiting for the agent':'sailing in')}else tip.classList.remove('on')});
+  cv.addEventListener('pointerleave',function(){hover=null;tip.classList.remove('on')});
+  cv.addEventListener('click',function(e){var b=cv.getBoundingClientRect(),h=pick(e.clientX-b.left,e.clientY-b.top);if(h==='agent')toast('Cap\'n Bolt: '+SAYS[Math.random()*SAYS.length|0]);else if(h)toast('Boat #'+h.id+' says hi! 👋');else{spawn();toast('You called in a boat! ⛵')}});
+  return {};
+})();
+setInterval(function(){var m=Math.floor((Date.now()-sim.start)/60000);$('#lUp').textContent=m<60?m+'m':Math.floor(m/60)+'h '+m%60+'m'},5000);
+
+/* =====================================================================
+   AGENT PORTRAIT
+   ===================================================================== */
+(function(){var cv=$('#agentArt'),x=cv.getContext('2d'),dpr=Math.min(2,devicePixelRatio||1);cv.width=420*dpr;cv.height=420*dpr;x.scale(dpr,dpr);
+  var says=['Ahoy! Dock fee, please. ⚓','Every boat gets a wave. 👋','I take the hat very seriously.','Berth 2 is my favourite. Don\'t tell berth 1.','Vault check: shiny. ✨'],si=0;
+  setInterval(function(){si=(si+1)%says.length;$('#agentSays').textContent=says[si]},4000);
+  (function f(t){requestAnimationFrame(f);if(document.hidden)return;x.clearRect(0,0,420,420);
+    // little dock + water
+    x.fillStyle='#25b8e3';x.beginPath();x.ellipse(210,350,190,46,0,0,7);x.fill();x.strokeStyle='rgba(255,255,255,.6)';x.lineWidth=3;for(var i=0;i<4;i++){var wx=60+i*90+Math.sin(t/700+i)*8;x.beginPath();x.moveTo(wx,350+i%2*14);x.quadraticCurveTo(wx+14,344+i%2*14,wx+28,350+i%2*14);x.stroke()}
+    x.fillStyle='#c98a4b';rr(x,90,318,240,22,6);x.fill();stroke(x,3);x.strokeStyle='rgba(74,34,12,.35)';x.lineWidth=2;for(i=110;i<330;i+=24){x.beginPath();x.moveTo(i,318);x.lineTo(i,340);x.stroke()}
+    drawAgent(x,210,268,3.1,t,{collect:(t%5000)>3600});
+    drawCoin(x,330,170+Math.sin(t/400)*8,16,t);drawCoin(x,96,200+Math.sin(t/500+1)*8,11,t+300)})(0);
+})();
+
+/* reveal */
+(function(){var els=$$('.reveal');if(!('IntersectionObserver' in window)||reduce){els.forEach(function(e){e.classList.add('in')});return}
+  var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{rootMargin:'0px 0px -8% 0px'});els.forEach(function(e){io.observe(e)})})();
+})();
+</script>
+</body>
+</html>
